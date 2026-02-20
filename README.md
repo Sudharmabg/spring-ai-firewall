@@ -344,36 +344,6 @@ Expected: Separate rate limit for this API key
 }
 ```
 
-## Maven Central Publishing
-
-### Prerequisites
-
-1. OSSRH account: https://central.sonatype.org/register/central-portal/
-2. GPG key for signing
-3. Configure `~/.m2/settings.xml`:
-
-```xml
-<settings>
-  <servers>
-    <server>
-      <id>ossrh</id>
-      <username>YOUR_USERNAME</username>
-      <password>YOUR_PASSWORD</password>
-    </server>
-  </servers>
-</settings>
-```
-
-### Release
-
-```bash
-# Build and deploy to Maven Central
-mvn clean deploy -P release
-
-# Or just build locally
-mvn clean install
-```
-
 ## Requirements
 
 - Java 17+
