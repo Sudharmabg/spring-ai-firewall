@@ -1,0 +1,49 @@
+# Example configuration with OpenAI enabled
+# Copy to application.yml and set OPENAI_API_KEY environment variable
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo-app
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+firewall:
+  enabled: true
+  api-key-header: X-API-Key
+  
+  rate-limit:
+    enabled: true
+    requests-per-minute: 100
+  
+  rules:
+    - path: "/api/auth/**"
+      requests-per-minute: 10
+      action: BLOCK
+      sensitive: true
+    
+    - path: "/api/public/**"
+      requests-per-minute: 200
+      action: ALLOW
+  
+  # ⚠️ WARNING: OpenAI API calls cost money!
+  # Only enable if you have an OpenAI API key and understand the costs
+  ai:
+    enabled: true                    # Set to true to enable
+    provider: openai
+    api-key: ${OPENAI_API_KEY}       # Set via environment variable
+    model: gpt-4o-mini               # Cheapest model
+    timeout-seconds: 2               # Fail-open after 2 seconds
+    cache-ttl-minutes: 3             # Cache results for 3 minutes
+
+logging:
+  level:
+    com.sudharma.firewall: DEBUG     # Detailed firewall logs
+
+# To run with OpenAI:
+# export OPENAI_API_KEY=sk-your-key-here
+# mvn spring-boot:run

@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo-app
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      ssl:
+        enabled: ${REDIS_SSL:false}
+
+firewall:
+  enabled: true
+  api-key-header: X-API-Key
+  rate-limit:
+    enabled: true
+    requests-per-minute: 100
+  rules:
+    - path: "/api/auth/**"
+      requests-per-minute: 10
+      action: BLOCK
+      sensitive: true
+    - path: "/api/public/**"
+      requests-per-minute: 200
+      action: ALLOW
+  ai:
+    enabled: true
+    provider: openai
+    api-key: ${OPENAI_API_KEY}
+    model: gpt-4o-mini
+    timeout-seconds: 2
+    cache-ttl-minutes: 3
+
+logging:
+  level:
+    com.sudharma.firewall: DEBUG
+    io.lettuce.core: DEBUG
+    org.springframework.data.redis: DEBUG
